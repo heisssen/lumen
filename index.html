@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЛЮМЕН | Система правил</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #7c4dff;
+            --primary-dark: #5e35b1;
+            --primary-light: #e8eaf6;
+            --primary-alpha: rgba(124, 77, 255, 0.1);
+            --secondary: #ff4081;
+            --secondary-light: #fff1f8;
+            --secondary-alpha: rgba(255, 64, 129, 0.1);
+            --accent: #00e5ff;
+            --accent-light: #e0f7fa;
+            --accent-alpha: rgba(0, 229, 255, 0.1);
+            --success: #00e676;
+            --success-light: #e0f2f1;
+            --error: #ff3d00;
+            --error-light: #ffebee;
+            --warning: #ffab00;
+            --warning-light: #fff8e1;
+            
+            --text-primary: #212121;
+            --text-secondary: #424242;
+            --text-tertiary: #757575;
+            --bg-primary: #ffffff;
+            --bg-secondary: #fafafa;
+            --bg-tertiary: #f5f5f5;
+            --border: #e0e0e0;
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            
+            --radius-sm: 0.25rem;
+            --radius: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            
+            --header-height: 64px;
+            --sidebar-width: 280px;
+            --max-content-width: 1200px;
+            
+            --transition: all 0.2s ease;
+        }
+        
+        [data-theme="dark"] {
+            --primary: #9575cd;
+            --primary-dark: #7e57c2;
+            --primary-light: #1a237e;
+            --primary-alpha: rgba(149, 117, 205, 0.1);
+            --secondary: #f48fb1;
+            --secondary-light: #880e4f;
+            --secondary-alpha: rgba(244, 143, 177, 0.1);
+            --accent: #40c4ff;
+            --accent-light: #006064;
+            --accent-alpha: rgba(64, 196, 255, 0.1);
+            
+            --text-primary: #f5f5f5;
+            --text-secondary: #e0e0e0;
+            --text-tertiary: #bdbdbd;
+            --bg-primary: #121212;
+            --bg-secondary: #212121;
+            --bg-tertiary: #303030;
+            --border: #424242;
+        }
+        
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: var(--header-height);
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+            background: var(--bg-primary);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+        }
+        
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        h4 { font-size: 1.25rem; }
+        
+        p {
+            margin-bottom: 1.25rem;
+            font-size: 1.0625rem;
+            max-width: 70ch;
+            color: var(--text-secondary);
+        }
+        
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        a:hover {
+            color: var(--primary-dark);
+        }
+        
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Layout */
+        .app {
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        .header {
+            position: sticky;
+            top: 0;
+            height: var(--header-height);
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: var(--max-content-width);
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-icon {
+            font-size: 1.75rem;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .theme-toggle:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        .main {
+            display: flex;
+        }
+        
+        .sidebar {
+            width: var(--sidebar-width);
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            bottom: 0;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 1.5rem 0;
+            transition: var(--transition);
+            z-index: 90;
+        }
+        
+        .content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            transition: var(--transition);
+        }
+        
+        .content-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Hero Section - Monochromatic */
+        .hero {
+            position: relative;
+            background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+            color: #fff;
+            padding: 6rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.3) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: var(--max-content-width);
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .hero-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-logo-icon {
+            font-size: 4rem;
+            margin-right: 1rem;
+            color: #fff;
+        }
+        
+        .hero-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero-title h1 {
+            font-size: 6rem;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: -1px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background-color: #ffffff;
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+            color: #000;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            color: #fff;
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #fff;
+            transform: translateY(-2px);
+            color: #fff;
+        }
+        
+        .dice-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+        }
+        
+        .dice {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.1);
+            animation-name: float;
+            animation-timing-function: ease-in-out;
+            animation-iteration-count: infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+        
+        /* Navigation */
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .nav-section-title {
+            padding: 0 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-tertiary);
+            margin-bottom: 0.75rem;
+        }
+        
+        .nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            padding: 0.625rem 1.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-left: 2px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .nav-item a:hover {
+            color: var(--primary);
+            background: var(--primary-alpha);
+            text-decoration: none;
+        }
+        
+        .nav-item a.active {
+            color: var(--primary);
+            background: var(--primary-alpha);
+            border-left: 2px solid var(--primary);
+        }
+        
+        .nav-icon {
+            margin-right: 0.75rem;
+            font-size: 1.125rem;
+        }
+        
+        /* Content Components */
+        .content-section {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            margin-bottom: 3rem;
+            box-shadow: var(--shadow);
+            padding: 2.5rem;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            height: 0.25rem;
+            width: 4rem;
+            background: var(--secondary);
+            border-radius: var(--radius-sm);
+        }
+        
+        .subsection {
+            margin: 3rem 0;
+            position: relative;
+        }
+        
+        .subsection:first-child {
+            margin-top: 2rem;
+        }
+        
+        .subsection-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        
+        /* Components */
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .bold {
+            font-weight: 600;
+        }
+        
+        .italic {
+            font-style: italic;
+        }
+        
+        .info-box, .tip-box, .warning-box, .key-concept, .example {
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin: 1.75rem 0;
+            position: relative;
+            border: 1px solid;
+            transition: var(--transition);
+        }
+        
+        .info-box {
+            background: var(--primary-alpha);
+            border-color: var(--primary-light);
+        }
+        
+        .tip-box {
+            background: var(--success-light);
+            border-color: var(--success);
+        }
+        
+        .warning-box {
+            background: var(--warning-light);
+            border-color: var(--warning);
+        }
+        
+        .key-concept {
+            background: var(--secondary-alpha);
+            border-color: var(--secondary-light);
+        }
+        
+        .example {
+            background: var(--accent-alpha);
+            border-color: var(--accent-light);
+        }
+        
+        .box-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-box .box-title {
+            color: var(--primary);
+        }
+        
+        .tip-box .box-title {
+            color: var(--success);
+        }
+        
+        .warning-box .box-title {
+            color: var(--warning);
+        }
+        
+        .key-concept .box-title {
+            color: var(--secondary);
+        }
+        
+        .example .box-title {
+            color: black;
+        }
+        
+        .info-box p:last-child, 
+        .tip-box p:last-child, 
+        .warning-box p:last-child, 
+        .key-concept p:last-child, 
+        .example p:last-child,
+        .info-box ul:last-child,
+        .tip-box ul:last-child,
+        .warning-box ul:last-child,
+        .key-concept ul:last-child,
+        .example ul:last-child,
+        .info-box ol:last-child,
+        .tip-box ol:last-child,
+        .warning-box ol:last-child,
+        .key-concept ol:last-child,
+        .example ol:last-child {
+            margin-bottom: 0;
+        }
+        
+        .rules-table {
+            border-radius: var(--radius);
+            margin: 1.75rem 0;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        
+        .rule-row {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .rule-row:last-child {
+            border-bottom: none;
+        }
+        
+        .rule-roll {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            min-width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .rule-result {
+            padding: 1rem 1.5rem;
+            flex: 1;
+            background: var(--bg-secondary);
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.75rem 0;
+        }
+        
+        .card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+            height: 100%;
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .dice-visual {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+        
+        .die {
+            font-size: 2.5rem;
+            color: var(--primary);
+            transition: var(--transition);
+            cursor: pointer;
+            animation: appear 1s forwards;
+        }
+        
+        .die:hover {
+            transform: rotate(360deg) scale(1.2);
+            color: var(--secondary);
+        }
+        
+        @keyframes appear {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        .page-ref {
+            display: inline-flex;
+            align-items: center;
+            background: var(--primary-alpha);
+            color: var(--primary);
+            padding: 0.25em 0.5em;
+            border-radius: var(--radius-sm);
+            font-size: 0.875em;
+            font-weight: 500;
+        }
+        
+.table-container {
+    overflow-x: auto;
+    margin: 1.75rem 0;
+    border: 1px solid #333;
+    border-radius: var(--radius);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    text-align: left;
+    background: #222;
+    color: #fff;
+    padding: 0.85rem 1.25rem;
+    font-weight: 600;
+    border-bottom: 2px solid #444;
+}
+
+td {
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid #ddd;
+    color: var(--text-secondary);
+}
+
+tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.03);
+}
+
+tr:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .table-container {
+    border-color: #555;
+}
+
+[data-theme="dark"] th {
+    background: #333;
+    border-bottom-color: #666;
+}
+
+[data-theme="dark"] td {
+    border-color: #444;
+}
+
+[data-theme="dark"] tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+[data-theme="dark"] tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}        
+        /* Mobile menu */
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            font-size: 1.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .content {
+                margin-left: 0;
+                max-width: 100%;
+            }
+            
+            .hero-title h1 {
+                font-size: 4rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .content-section {
+                padding: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 1.75rem;
+            }
+            
+            .subsection-title {
+                font-size: 1.5rem;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-title h1 {
+                font-size: 3rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.25rem;
+                margin-bottom: 2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .content-section {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Icons */
+        .icon {
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            stroke-width: 0;
+            stroke: currentColor;
+            fill: currentColor;
+            vertical-align: -0.125em;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="header-content">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+                    </svg>
+                </button>
+                <div class="logo">
+                    <span class="logo-icon">⚄</span>
+                    ЛЮМЕН SRD
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <svg class="icon" id="themeIcon" viewBox="0 0 24 24">
+                        <path d="M12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0-6a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0V3a1 1 0 0 1 1-1zm0 20a1 1 0 0 1-1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1-1 1zm6-10a1 1 0 0 1 1 1 1 1 0 0 1-1 1h-2a1 1 0 0 1 0-2h2zm-10 0a1 1 0 0 1 0 2H6a1 1 0 0 1 0-2h2zm8.95-5.364a1 1 0 0 1 0 1.414L15.536 9.464a1 1 0 0 1-1.414-1.414l1.414-1.414a1 1 0 0 1 1.414 0zm-9.9 9.9a1 1 0 0 1 0 1.414L8.636 15.536a1 1 0 0 1-1.414-1.414l1.414-1.414a1 1 0 0 1 1.414 0zm9.9 1.414a1 1 0 0 1-1.414 0l-1.414-1.414a1 1 0 0 1 1.414-1.414l1.414 1.414a1 1 0 0 1 0 1.414zm-9.9-9.9a1 1 0 0 1-1.414 0L6.636 8.464A1 1 0 1 1 8.05 7.05l1.414 1.414a1 1 0 0 1 0 1.414z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+        
+        <!-- Hero Section - Monochromatic -->
+        <section class="hero">
+            <div class="hero-bg"></div>
+            
+            <div class="dice-container">
+                <div class="dice" style="top: 10%; left: 20%; font-size: 2rem; animation-duration: 6s;">⚀</div>
+                <div class="dice" style="top: 25%; left: 85%; font-size: 3rem; animation-duration: 8s;">⚁</div>
+                <div class="dice" style="top: 65%; left: 15%; font-size: 2.5rem; animation-duration: 7s; animation-delay: 1s;">⚂</div>
+                <div class="dice" style="top: 45%; left: 75%; font-size: 4rem; animation-duration: 9s; animation-delay: 2s;">⚃</div>
+                <div class="dice" style="top: 80%; left: 45%; font-size: 3rem; animation-duration: 7.5s; animation-delay: 1.5s;">⚄</div>
+                <div class="dice" style="top: 15%; left: 60%; font-size: 2rem; animation-duration: 8.5s; animation-delay: 0.5s;">⚅</div>
+            </div>
+            
+            <div class="hero-content">
+                <div class="hero-title">
+                    <h1>ЛЮМЕН</h1>
+                </div>
+                <p class="hero-subtitle">Система правил для створення надзвичайних історій у жанрі героїчного фентезі, де гравці втілюють могутніх героїв з унікальними здібностями</p>
+                <div class="hero-buttons">
+                    <a href="#intro" class="btn btn-primary">Почати знайомство</a>
+                    <a href="#classes" class="btn btn-outline">Переглянути класи</a>
+                </div>
+            </div>
+        </section>
+        
+        <main class="main">
+            <aside class="sidebar" id="sidebar">
+                <nav>
+                    <div class="nav-section">
+                        <div class="nav-section-title">Основи</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="#intro" class="active">
+                                    <svg class="icon nav-icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM11 7h2v2h-2V7zm0 4h2v6h-2v-6z"/>
+                                    </svg>
+                                    Що таке ЛЮМЕН?
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#mechanics">
+                                    <svg class="icon nav-icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1-11v4h2v-4h3l-4-4-4 4h3z"/>
+                                    </svg>
+                                    Основна механіка
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#attributes">
+                                    <svg class="icon nav-icon" viewBox="0 0 24 24">
+                                        <path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/>
+                                    </svg>
+                                    Атрибути
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <div class="nav-section-title">Персонажі</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="#classes">
+                                    <svg class="icon nav-icon" viewBox="0 0 24 24">
+                                        <path d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm9 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v2z"/>
+                                    </svg>
+                                    Класи
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#weapons">
+                                    <svg class="icon nav-icon" viewBox="0 0 24 24">
+                                        <path d="M7.05 13.406l3.534 3.536-1.413 1.414 1.415 1.415-1.414 1.414-2.122-2.122-2.829 2.829-1.414-1.414 2.829-2.829-2.122-2.122L5 13.121l1.414-1.414L10 15.243l-2.95-2.95 6.364-6.364a2 2 0 0 1 2.829 0l4.242 4.242a2 2 0 0 1 0 2.829L14.12 19.364l-2.829-2.829-4.242-4.242 1.414-1.414 1.414-1.414-2.122-2.122-1.414 1.414-1.414 1.414-1.414-1.414 2.122-2.122-4.242-4.243L3.222 4.808l7.07 7.071-3.242 1.528z"/>
+                                    </svg>
+                                    Зброя
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <div class="nav-section-title">Ігровий процес</div>
+                        <ul class="nav-list">
+                            <li class="nav-item">
+                                <a href="#combat">
+                                    <svg class="icon nav-icon" viewBox="0 0 24 24">
+                                        <path d="M6.94 14.036c-.233.624-.43 1.2-.606 1.783.96-.697 2.101-1.139 3.418-1.304 2.513-.314 4.746-1.973 5.876-4.058l-1.456-1.455 1.413-1.415 1-1.001c.43-.43.915-1.224 1.428-2.368-5.593.867-9.018 4.292-11.074 9.818zM17 9.001L18 10c-1 3-4 6-8 6.5-2.669.334-4.336 2.167-5.002 5.5H3C4 16 6 2 21 2c-1 2.997-1.998 4.996-2.997 5.997L17 9.001z"/>
+                                    </svg>
+                                    Сутички
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#enemies">
+                                    <svg class="icon nav-icon" viewBox="0 0 24 24">
+                                        <path d="M12 13.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5zm7.5-2.5a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0zm-7.5-5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm2.5 12.25V20h-5v-2.25c0-.69.56-1.25 1.25-1.25h2.5c.69 0 1.25.56 1.25 1.25zM17 17v-1a5 5 0 0 0-10 0v1c0 1.1.9 2 2 2h6a2 2 0 0 0 2-2z"/>
+                                    </svg>
+                                    Вороги
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#game-cycle">
+                                    <svg class="icon nav-icon" viewBox="0 0 24 24">
+                                        <path d="M12 4V2.21c0-.45-.54-.67-.85-.35l-2.8 2.79a.5.5 0 0 0 0 .71l2.79 2.79c.32.31.86.09.86-.36V6c3.31 0 6 2.69 6 6 0 .79-.15 1.56-.44 2.25-.15.36-.04.77.23 1.04.51.51 1.37.33 1.64-.34.37-.91.57-1.91.57-2.95 0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-.79.15-1.56.44-2.25.15-.36.04-.77-.23-1.04-.51-.51-1.37-.33-1.64.34C4.2 9.96 4 10.96 4 12c0 4.42 3.58 8 8 8v1.79c0 .45.54.67.85.35l2.79-2.79c.2-.19.2-.51 0-.7l-2.79-2.79a.5.5 0 0 0-.85.35V18z"/>
+                                    </svg>
+                                    Ігровий цикл
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+            
+            <div class="content">
+                <div class="content-inner">
+                    <!-- РОЗДІЛ: Вступ -->
+                    <section id="intro" class="content-section">
+                        <h1 class="section-title">Що таке ЛЮМЕН?</h1>
+                        
+                        <p><span class="highlight">ЛЮМЕН</span> — це проста система правил для створення та гри в настільні рольові ігри, зосереджені на історіях про <span class="highlight">могутніх персонажів</span>. Вперше ЛЮМЕН була розроблена для ігор LIGHT та NOVA, а згодом перетворена на цей жанрово-незалежний Системний Довідковий Документ, щоб ви могли використовувати її для створення власних ігор на тій самій системі.</p>
+                        
+                        <div class="key-concept">
+                            <div class="box-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                </svg>
+                                Основна концепція
+                            </div>
+                            <p>За своєю суттю, ЛЮМЕН створена для розповідей у жанрі "героїчне фентезі". Персонажі гравців мають доступ до неймовірних сил і невпинно використовують їх для досягнення своїх цілей.</p>
+                        </div>
+                        
+                        <p>Натхненням для системи слугували такі жанри відеоігор, як лутер-шутери (<span class="italic">Destiny</span>), геройські шутери (<span class="italic">Overwatch</span>), та данжен-кроулери (<span class="italic">Diablo</span>).</p>
+                        
+                        <p>ЛЮМЕН також <span class="highlight">орієнтована на сутички</span>. Хоча вона не вимагає карт чи вимірювання відстаней, ігри на цій системі найкраще працюють, коли розповідають про могутніх персонажів, що пробиваються крізь місії з боєм.</p>
+                        
+                        <p>Це підводить нас до третьої складової ЛЮМЕН. Вона побудована на основі ключового <span class="highlight">ігрового циклу</span>. Персонажі вирушають у пригоди, місії, квести — називайте як завгодно. Після успішного завершення вони повертаються, мають коротку перерву, а потім знову беруться до роботи.</p>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Що це за документ?</h2>
+                            <p>Це Системний Довідковий Документ та посібник з дизайну для ЛЮМЕН. Як SRD, він є жанрово-незалежним і надає вам основні правила для гри на системі ЛЮМЕН. Він також містить поради та рекомендації щодо створення власних ігор за допомогою ЛЮМЕН або розробки матеріалів для вже існуючих ігор.</p>
+                            
+                            <div class="info-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Системний Довідковий Документ
+                                </div>
+                                <p>SRD є відправною точкою для створення власних ігор на базі вже існуючої системи. Це набір основних правил, які можна розширювати та змінювати під власні потреби.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Хто потрібен для гри?</h2>
+                            <p>ЛЮМЕН ігри використовують традиційний склад: <span class="highlight">Майстер Гри (МГ)</span> та деяка кількість <span class="highlight">гравців</span>. З мого досвіду, трійка гравців завжди була ідеальним варіантом, але ваш досвід може відрізнятися. Роль МГ за столом вимагає певних навичок імпровізації, оскільки ігри, що ми створюємо на ЛЮМЕН, не потребують тривалої підготовки, а бій з боку МГ є радше реактивним, ніж проактивним.</p>
+                            
+                            <div class="tip-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m1 3v7h-2V7h2m0 8v2h-2v-2h2z"/>
+                                    </svg>
+                                    Порада
+                                </div>
+                                <p>Нові Майстри Гри можуть почати з готових сценаріїв перед тим, як переходити до власних імпровізованих пригод.</p>
+                            </div>
+                            
+                            <p>Гравцям же потрібно бути готовими відчути себе крутими. Ми це забезпечимо завдяки їхнім <span class="highlight">Класам</span> <span class="page-ref">4</span>.</p>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">А що з кубиками?</h2>
+                            <p>Ігри на ЛЮМЕН розроблені для використання лише <span class="highlight">d6</span> кубиків. Це робить усе простішим, і більшість людей можуть у крайньому разі знайти d6 у коробці зі старою настільною грою. Використання поліедральних наборів ускладнить гру, обмежить доступ до неї і, що найважливіше, суперечитиме основній механіці.</p>
+                            
+                            <div class="dice-visual">
+                                <span class="die">⚀</span>
+                                <span class="die">⚁</span>
+                                <span class="die">⚂</span>
+                                <span class="die">⚃</span>
+                                <span class="die">⚄</span>
+                                <span class="die">⚅</span>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- РОЗДІЛ: Основна механіка -->
+                    <section id="mechanics" class="content-section">
+                        <h1 class="section-title">Основна механіка</h1>
+                        
+                        <p><span class="highlight">ЛЮМЕН</span> використовує систему пулів (наборів) кубиків d6 із діапазонами успіху як основну механіку. Коли персонаж діє і ця дія пов'язана з ризиком, він кидає кубики. Гравець кидає стільки d6, скільки становить значення Атрибута, що найкраще описує спосіб дії, і залишає найвищий результат.</p>
+                        
+                        <div class="rules-table">
+                            <div class="rule-row">
+                                <div class="rule-roll">1-2:</div>
+                                <div class="rule-result">Дія провалюється, і настає наслідок.</div>
+                            </div>
+                            <div class="rule-row">
+                                <div class="rule-roll">3-4:</div>
+                                <div class="rule-result">Дія успішна, але виникає ускладнення.</div>
+                            </div>
+                            <div class="rule-row">
+                                <div class="rule-roll">5-6:</div>
+                                <div class="rule-result">Дія успішна без жодних проблем.</div>
+                            </div>
+                        </div>
+                        
+                        <div class="key-concept">
+                            <div class="box-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                </svg>
+                                Проста механіка
+                            </div>
+                            <p>Ось і все, так працює 90% гри.</p>
+                        </div>
+                        
+                        <div class="dice-visual">
+                            <span class="die">⚀</span>
+                            <span class="die">⚁</span>
+                            <span class="die">⚂</span>
+                            <span class="die">⚃</span>
+                            <span class="die">⚄</span>
+                            <span class="die">⚅</span>
+                        </div>
+                    </section>
+                    
+                    <!-- РОЗДІЛ: Атрибути -->
+                    <section id="attributes" class="content-section">
+                        <h1 class="section-title">Атрибути</h1>
+                        
+                        <p>В іграх на ЛЮМЕН немає списків навичок. Персонажі — це висококваліфіковані та здібні герої. Ми припускаємо, що вони здатні на майже будь-що.</p>
+                        
+                        <p>Важливо не що вони роблять, а <span class="highlight">як</span> вони це роблять. Кожен персонаж має 3 Атрибути, і їхні значення описують, як він воліє діяти.</p>
+                        
+                        <div class="card-grid">
+                            <div class="card">
+                                <div class="card-title">Силовий атрибут</div>
+                                <p>Символізує силові дії. Прояви сили, розмашисті дії, емоційні ситуації.</p>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-title">Швидкісний атрибут</div>
+                                <p>Символізує швидкісні та спритні дії. Своєчасна реакція, вчасна ідея, використання можливості.</p>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-title">Виважений атрибут</div>
+                                <p>Уособлює виважені дії. Терплячий, методичний, навіть хірургічний підхід.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box">
+                            <div class="box-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                </svg>
+                                Назви атрибутів
+                            </div>
+                            <p>Назви цих атрибутів мають відображати тематику вашої гри. Наприклад, у грі NOVA атрибути символізують різні підходи до сутичок: Сила, Потік та Фокус.</p>
+                        </div>
+                        
+                        <p>Використовуючи 3 Атрибути, гравці думають не про те, на що вони здатні, а про те, як вони хочуть підійти до вирішення проблеми.</p>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Приклади використання Атрибутів</h2>
+                            <p>На основі гри NOVA:</p>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    СИЛА
+                                </div>
+                                <p><strong>Поза сутичкою:</strong> Зламати консоль грубою силою, вибити двері чи бар'єр, витримати величезну вагу.</p>
+                                <p><strong>У сутичці:</strong> Використовувати нищівну вогнепальну зброю, заливати кімнату свинцем, трощити ворогів зброєю ближнього бою.</p>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    ПОТІК
+                                </div>
+                                <p><strong>Поза сутичкою:</strong> Швидко зламати консоль, "пройти крізь вушко голки", уникнути шкоди чи виявлення.</p>
+                                <p><strong>У сутичці:</strong> Перебігати від одного ворога до іншого, стріляти в супротивника, перш ніж той встигне зреагувати, цілитися посеред сальто.</p>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    ФОКУС
+                                </div>
+                                <p><strong>Поза сутичкою:</strong> Обережно відімкнути консоль, проаналізувати ситуацію чи місцевість, знати, коли саме діяти.</p>
+                                <p><strong>У сутичці:</strong> Ретельні прицільні постріли, удар у слабке місце, використання помилок ворога проти нього.</p>
+                            </div>
+                            
+                            <div class="tip-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m1 3v7h-2V7h2m0 8v2h-2v-2h2z"/>
+                                    </svg>
+                                    Підказка для Майстрів Гри
+                                </div>
+                                <p>Коли гравці описують свої дії, запитуйте їх, який підхід вони використовують. Це допоможе визначити, який атрибут слід застосувати для кидка.</p>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- РОЗДІЛ: Класи -->
+                    <section id="classes" class="content-section">
+                        <h1 class="section-title">Класи</h1>
+                        
+                        <p>Основа ігор на <span class="highlight">ЛЮМЕН</span> — це класи, з яких обирають гравці. Класи швидко створювати, а гравцям — ще швидше їх розуміти. Пам'ятайте, у них лише 3 Атрибути. Щоб завершити персонажа, нам знадобиться ще кілька деталей, але ми вже на правильному шляху.</p>
+                        
+                        <p>Ігри на ЛЮМЕН значною мірою натхненні відеоіграми, особливо тими, що мають перелік унікальних персонажів з невеликим набором сил.</p>
+                        
+                        <div class="key-concept">
+                            <div class="box-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                </svg>
+                                Приклади впливу
+                            </div>
+                            <ul>
+                                <li>Вартові у <span class="italic">Destiny</span> поділяються на три класи з невеликим набором унікальних Сил Світла.</li>
+                                <li>Персонажі <span class="italic">Overwatch</span> хочуть стріляти, але мають круті набори сил, що відрізняють їх один від одного.</li>
+                                <li>Класи в <span class="italic">Diablo</span> налаштовують набори сил, які вони беруть у бій, тож жодні два персонажі не зобов'язані діяти однаково.</li>
+                            </ul>
+                        </div>
+                        
+                        <p>Ми будемо створювати класи персонажів, які мають приблизно 3-5 <span class="highlight">Сил</span> — унікальних здібностей та талантів, які вони приносять у гру.</p>
+                        
+                        <div class="info-box">
+                            <div class="box-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                </svg>
+                                З чого складається персонаж у ЛЮМЕН:
+                            </div>
+                            <ul>
+                                <li><strong>3 Атрибути:</strong> Ми вже про них говорили.</li>
+                                <li><strong>Здоров'я:</strong> Це "героїчне фентезі", тож смерть, ймовірно, не є кінцевою, але нам потрібно відстежувати, коли персонажі отримують ушкодження.</li>
+                                <li><strong>Ресурс:</strong> Щось, що можна витрачати та відновлювати, і що персонажі використовуватимуть для активації своїх Сил.</li>
+                                <li><strong>Сили:</strong> 3-5 унікальних Сил, які роблять клас особливим. Вони, найімовірніше, будуть орієнтовані на сутички.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Здоров'я</h2>
+                            <p>Навіть якщо остаточна смерть рідко є можливою, Здоров'я — це необхідний компонент ігор на ЛЮМЕН. Чому?</p>
+                            
+                            <p>По-перше, це сутичкові ігри. Тож якщо ваші гравці завдають болю, вони, ймовірно, отримуватимуть його у відповідь. Це потрібно якось відстежувати.</p>
+                            
+                            <p>По-друге, втрата всього Здоров'я не означає, що ви мертві. Замість цього відбувається якийсь штраф за "смерть", і після цього персонаж одразу повертається в бій. Наприклад, у грі LIGHT, Вартові з кожною смертю та воскресінням стають спотворені Темрявою, що впливає на їхні кидки Атрибутів.</p>
+                            
+                            <div class="tip-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m1 3v7h-2V7h2m0 8v2h-2v-2h2z"/>
+                                    </svg>
+                                    Проєктування Здоров'я
+                                </div>
+                                <p>Сутички в іграх на ЛЮМЕН мають бути швидкими, а це означає, що як гравці, так і вороги є просто "мішками з хіт-поінтами". Більшість ворогів завдаватимуть 1-2 Шкоди, коли матимуть змогу, тому класи в ЛЮМЕН повинні починати з 5-10 Здоров'я, залежно від того, наскільки ризикованими ви хочете зробити сутички.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Ресурс</h2>
+                            <p>Найважливіша частина класу — це його Сили. Щоб їх використати, персонажі повинні витратити <span class="highlight">Ресурс</span>. Енергія, паливо, боєприпаси — як би ви його не назвали, персонажі мають обмежену кількість цього ресурсу для витрат у сутичці. Ресурс відновлюється, і гравці отримуватимуть його вдосталь протягом сутички, тож вони не повинні боятися його витрачати.</p>
+                            
+                            <p>Окрім активації Сил, ви можете дозволити Ресурсу виконувати й інші функції. Наприклад, у грі LIGHT, ресурс називається Світло. Окрім використання Сил, Світло дозволяло персонажам воскресати після смерті, перекидати кубики Атрибутів та ігнорувати величезну кількість шкоди.</p>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Сили</h2>
+                            <p>Те, що робить ігри на ЛЮМЕН захопливими — це спостереження за тим, як класи використовують свої <span class="highlight">Сили</span>. Кожен клас має 3-5 Сил, що активуються за допомогою Ресурсу.</p>
+                            
+                            <p>Чому саме 3-5? Швидкість. Сутички, що тривають годинами, — це нудно. Бій у грі на ЛЮМЕН закінчується за хвилини. Це тому, що персонажі знищують своїх ворогів цими Силами. А коли у них є лише 3-5 варіантів на вибір, хід гравця триває секунди, а не хвилини. Ми уникаємо "паралічу аналізу".</p>
+                            
+                            <div class="info-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Що таке Сила?
+                                </div>
+                                <p>Це щось, що персонаж активує під час сутички, щоб отримати перевагу. Сили зазвичай бувають двох типів:</p>
+                                <ul>
+                                    <li><strong>Одноразові сили</strong> активуються, їхній ефект миттєво спрацьовує, і гра продовжується.</li>
+                                    <li><strong>Тривалі сили</strong> діють певний час, надаючи бонуси, заважаючи ворогам, підсилюючи союзників тощо.</li>
+                                </ul>
+                            </div>
+                            
+                            <h3>Вартість</h3>
+                            <p>Активація Сил відбувається шляхом витрати Ресурсу. Існує два підходи до дизайну:</p>
+                            
+                            <div class="card-grid">
+                                <div class="card">
+                                    <div class="card-title">Однакова вартість</div>
+                                    <p>Усі Сили коштують однаково, зазвичай 1 одиницю Ресурсу. Це просто, і жодна Сила не здається "дорожчою" за іншу.</p>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-title">Різна вартість</div>
+                                    <p>Сили мають різну вартість, тож більш потужні Сили коштують більше Ресурсу, ніж інші.</p>
+                                </div>
+                            </div>
+                            
+                            <h3>Використання Сил</h3>
+                            <p>Сили можуть вимагати витрати Ресурсу для активації, але вони не вимагають кидків. Основна механіка гри на них не поширюється. Щойно їх активували, вони спрацьовують. Це підсилює елемент "героїчного фентезі".</p>
+                            
+                            <h3>Приклади Сил</h3>
+                            <p>З гри <strong>LIGHT</strong> (усі Сили коштують однаково):</p>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Вогняна Кузня
+                                </div>
+                                <p>Метнути 3 молоти, оповиті полум'ям. Кожен завдає 2 Шкоди, залишаючи після себе вогняні калюжі.</p>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Заряд
+                                </div>
+                                <p>Вами протікає електрика. Протягом наступних 3 атак ви рухаєтеся зі швидкістю блискавки й подвоюєте всю Шкоду, завдану в ближньому бою.</p>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Бульбашка
+                                </div>
+                                <p>Бар'єр із 10 Здоров'я оточує вас і всіх найближчих союзників. Атаки не можуть пройти крізь бар'єр в жодному напрямку.</p>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Сонячний Колодязь
+                                </div>
+                                <p>Ви та всі найближчі союзники відновлюєте всю Шкоду. Союзники відновлюють 1 Світло.</p>
+                            </div>
+                            
+                            <p>З гри <strong>FRAME</strong> (різна вартість):</p>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Загострення (Пасивна)
+                                </div>
+                                <p>Збільшує ефект усіх тегів "Slash" на +1 до Шкоди.</p>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Сюрикен (1 Енергії)
+                                </div>
+                                <p>Кинути сюрикен, що сам знаходить ціль. Сюрикен завдає 1 Шкоди і має тег "Slash".</p>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Димова Завіса (1 Енергії)
+                                </div>
+                                <p>Кинути димову шашку собі під ноги, приголомшуючи ворогів поблизу і роблячи вас невидимим до кінця вашого наступного ходу.</p>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Шторм Клинків (X Енергії)
+                                </div>
+                                <p>Стояти на місці й позначити X ворогів міткою смерті. Кожен позначений ворог атакований вашою тінню, що завдає 2 Шкоди за кожну мітку.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Додаткові особливості персонажа</h2>
+                            <p>Атрибути, Здоров'я, Ресурси та 3-5 Сил — це все, що вам потрібно для гри на ЛЮМЕН, але ви можете захотіти додати щось іще. 1-2 додаткові риси — це оптимальний варіант, щоб не сповільнювати гру.</p>
+                            
+                            <div class="info-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Що ще можна додати?
+                                </div>
+                                <ul>
+                                    <li><strong>Пасивні Сили/Перки:</strong> Невеликий бонус, який завжди активний у певних ситуаціях і не вимагає витрати Ресурсу. Наприклад, клас, що завдає більше шкоди певним типом зброї.</li>
+                                    <li><strong>Альтернативи Здоров'ю:</strong> Щити, що поглинають шкоду, або броня, що її зменшує.</li>
+                                    <li><strong>Жанрові риси:</strong> У грі LIGHT бій ведеться переважно з вогнепальною зброєю. Але іноді доводиться битися впритул. Тому я додав класові здібності ближнього бою, які були унікальними для кожного класу.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Варіанти створення персонажа</h2>
+                            <p>Існує два основні підходи до того, як гравці отримують свої класові риси.</p>
+                            
+                            <div class="card-grid">
+                                <div class="card">
+                                    <div class="card-title">1. Традиційний підхід</div>
+                                    <p>Кожен клас — це готовий "пакет". Він має визначений набір Здоров'я, Ресурсів, Сил та інших рис. Коли гравець обирає такий клас, він точно знає, що отримує. Цей підхід прискорює створення персонажа і допомагає гравцям зосередитися на тому, що їхній персонаж робить найкраще.</p>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-title">2. Підхід "а-ля-карт"</div>
+                                    <p>У цьому методі гравці обирають "каркас" класу, який надає їм Здоров'я та Ресурси, а потім вони самі обирають 3-5 Сил з довгого списку. Цей метод вимагає більше часу на створення персонажа, але дозволяє гравцям створити саме того героя, яким вони хочуть грати. Гра про супергероїв чудово підійде для такого підходу.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+					
+					                    <!-- РОЗДІЛ: Зброя -->
+                    <section id="weapons" class="content-section">
+                        <h1 class="section-title">Зброя</h1>
+                        
+                        <p>Персонажам потрібні інструменти війни для виконання своєї роботи. Замість того, щоб створювати довгий список усієї доступної зброї, в іграх на <span class="highlight">ЛЮМЕН</span> вона генерується. Ця ідея запозичена з сильного впливу на <span class="highlight">ЛЮМЕН</span> лутер-шутерів та подібних жанрів.</p>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Типи</h2>
+                            <p>Типи доступної зброї залежатимуть від вашого сеттингу. Створюючи тип зброї, вам знадобляться три речі:</p>
+                            
+                            <div class="info-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Компоненти типу зброї
+                                </div>
+                                <ul>
+                                    <li>Назва типу зброї (наприклад, гвинтівка, меч, лазерна гармата).</li>
+                                    <li>Шкода, яку зброя завдає за замовчуванням.</li>
+                                    <li>Дистанція, на якій працює зброя (наприклад, Близька/Середня, або лише Далека).</li>
+                                    <li>(Опціонально) Будь-які Теги, яких вимагає зброя.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Приклади типів зброї з гри LIGHT
+                                </div>
+                                
+                                <div class="table-container">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Тип</th>
+                                                <th>Шкода</th>
+                                                <th>Дистанція</th>
+                                                <th>Теги (якщо є)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Автоматична гвинтівка</td>
+                                                <td>1</td>
+                                                <td>Середня</td>
+                                                <td>-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Ручна гармата</td>
+                                                <td>2</td>
+                                                <td>Близька</td>
+                                                <td>-</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Снайперська гвинтівка</td>
+                                                <td>3</td>
+                                                <td>Далека</td>
+                                                <td>Стаціонарна</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Пістолет-кулемет</td>
+                                                <td>1</td>
+                                                <td>Близька/Середня</td>
+                                                <td>Розпилення</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Розвідувальна гвинтівка</td>
+                                                <td>2</td>
+                                                <td>Середня/Далека</td>
+                                                <td>-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Теги</h2>
+                            <p>Хоча типи зброї пропонують певну різноманітність, те, що відрізняє одну зброю від іншої, — це її <span class="highlight">теги</span>. Думайте про теги як про модифікації для зброї, характеристики, що змінюють її функціонування порівняно зі стандартним. Вам знадобиться довгий список тегів, оскільки ви будете часто на нього покладатися.</p>
+                            
+                            <div class="key-concept">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Типи тегів
+                                </div>
+                                <p>Теги можуть бути <span class="bold">чисто оповідними</span> (унікальний вигляд, звук, репутація) або, що частіше, <span class="bold">механічними</span>.</p>
+                            </div>
+                            
+                            <div class="card-grid">
+                                <div class="card">
+                                    <div class="card-title">Ідеї для механічних тегів</div>
+                                    <ul>
+                                        <li>Підвищення ефективності при використанні певного Атрибута.</li>
+                                        <li>Більше Шкоди проти певних типів ворогів.</li>
+                                        <li>Зміна ефективної дистанції.</li>
+                                        <li>Несподівані способи функціонування зброї.</li>
+                                        <li>Взаємодія із Силами або Ресурсом.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Створення зброї</h2>
+                            <p>Ігри на <span class="highlight">ЛЮМЕН</span> за замовчуванням мають систему випадкового створення зброї. Коли створюються персонажі, вони також створюють принаймні одну одиницю зброї для себе. Зазвичай це робиться за допомогою таблиці для визначення типу зброї. Після цього гравці додають 1 або 2 теги. Ви можете дозволити гравцям обирати теги або генерувати їх випадково.</p>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Приклад процесу створення зброї
+                                </div>
+                                <ol>
+                                    <li>Гравець кидає кубик для визначення типу зброї з доступної таблиці.</li>
+                                    <li>Отримавши тип (наприклад, Ручна гармата: 2 Шкоди, Близька), гравець додає 1-2 теги.</li>
+                                    <li>Теги можуть бути обрані або визначені випадково (наприклад, "Енергетична" і "Відкат").</li>
+                                    <li>Гравець описує, як виглядає його зброя, враховуючи її тип та теги.</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Використання зброї в сутичці</h2>
+                            <p>Гравці використовують свою зброю в сутичці під час свого ходу. Коли зброя використовується, персонаж обирає ціль у межах її дистанції та описує, <span class="highlight">як</span> він її використовує. Це активує основну механіку системи <span class="highlight">ЛЮМЕН</span>. Те, як хтось використовує зброю, визначає, який <span class="highlight">Атрибут</span> він кидає, замість того, щоб мати "навичку володіння пістолетом" або "навичку фехтування".</p>
+                            
+                            <div class="tip-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m1 3v7h-2V7h2m0 8v2h-2v-2h2z"/>
+                                    </svg>
+                                    Послідовність атаки
+                                </div>
+                                <ol>
+                                    <li>Гравець описує, як його персонаж використовує зброю.</li>
+                                    <li>Виходячи з опису, визначається Атрибут для кидка.</li>
+                                    <li>Персонаж кидає відповідний Атрибут.</li>
+                                    <li>Якщо отримано будь-який успіх (3+), завдається Шкода зброї.</li>
+                                </ol>
+                            </div>
+                            
+                            <div class="key-concept">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Важливий принцип
+                                </div>
+                                <p>Важливо: в ЛЮМЕН те, <span class="bold">як</span> ви використовуєте зброю, важливіше за те, <span class="bold">яку</span> зброю ви використовуєте. Ваш підхід визначає Атрибут, який ви кидаєте, що впливає на ваші шанси на успіх.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    
+                    <!-- РОЗДІЛ: Сутички -->
+                    <section id="combat" class="content-section">
+                        <h1 class="section-title">Сутички</h1>
+                        
+                        <p>Ігри на <span class="highlight">ЛЮМЕН</span> орієнтовані на сутички. Чи то перестрілки на дикому заході, розсікання орд демонів мечами, чи стрибки у ваш екзокостюм для нищівної атаки на ворогів — ви будете битися.</p>
+                        
+                        <p>Коли між персонажами гравців та їхніми ворогами спалахує бій, це називається <span class="highlight">Битва</span>.</p>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Тактично-спрощений бій</h2>
+                            <p>Бій задуманий бути швидким та смертоносним. У гравців не буде довгих, затягнутих ходів, а ворожі сили робитимуть усе можливе, щоб реагувати на часто непереборну міць персонажів. Вам не потрібна карта, оскільки рух та конкретні відстані не вимірюються. Замість цього гравці по черзі "перемикатимуть камеру" полем бою, поки кожен робить щось неймовірне.</p>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Раунди та Ходи</h2>
+                            <p>Прогрес Битв відстежується за допомогою Раундів та Ходів. Протягом одного раунду кожен персонаж гравця отримає можливість діяти (це його хід), після чого свій хід зробить МГ, завершуючи раунд. Цей цикл повторюється, доки Битва не закінчиться, зазвичай тим, що персонажі стоять над трупами своїх ворогів.</p>
+                            
+                            <div class="key-concept">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Структура раунду сутички
+                                </div>
+                                <ol>
+                                    <li>Ходи персонажів гравців (по одному)</li>
+                                    <li>Хід МГ</li>
+                                    <li>Завершення раунду</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Ходи Гравців</h2>
+                            <p>Персонажі гравців виконують одну дію протягом свого ходу і можуть вільно пересуватися. Що таке дія? Зазвичай це атака ворога, яка вирішується за допомогою основної механіки, базуючись на тому, який Атрибут найкраще описує підхід. Це може бути й щось інше. Наприклад, спроба виламати двері, поки ваші союзники стримують хвилі ворогів, — це дія.</p>
+                            
+                            <div class="info-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Сили під час сутички
+                                </div>
+                                <p>Використання Сили не витрачає дію персонажа. Поки у них є Ресурс для витрати, вони можуть використовувати свої Сили разом з іншими атаками.</p>
+                                <p>Чому так? Дві причини:</p>
+                                <ul>
+                                    <li>По-перше, Сили не вимагають кидків.</li>
+                                    <li>По-друге, Сили — це можливість для гравців похизуватися, і іноді можливість поєднати атаку зброєю із Силою відчувається дуже, дуже круто.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Хід МГ</h2>
+                            <p>Майстер Гри не сидить без діла, поки гравці знищують його ворогів. Пам'ятаєте основну механіку? При будь-якому кидку від 1 до 4 виникає якийсь наслідок або ускладнення. Коли це стається, МГ використовує свої ворожі сили.</p>
+                            
+                            <p>Після того, як кожен гравець зробив свій хід, МГ робить дві дуже важливі речі:</p>
+                            
+                            <div class="card-grid">
+                                <div class="card">
+                                    <div class="card-title">Кардинально змінює Битву</div>
+                                    <p>Хід МГ приносить велику зміну на поле бою. Що таке "велика зміна"? Варіантів безліч, залежно від вашого сеттингу:</p>
+                                    <ul>
+                                        <li>Вмикається тривога, і прибуває підкріплення.</li>
+                                        <li>Ворог змінює тактику.</li>
+                                        <li>З'являється новий тип ворогів, стійкий до поточних підходів гравців.</li>
+                                        <li>Навколишнє середовище раптово змінюється (наприклад, розгерметизація шлюзу).</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-title">Генерує Здобич</div>
+                                    <p>Ця ідея запозичена з відеоігор, де вороги після смерті зручно залишають за собою маленькі сфери здоров'я, боєприпасів, енергії — всього, що вам може знадобитися.</p>
+                                    <p>Наприкінці раунду, завершуючи свій хід, МГ кидає d6 за кожного вбитого ворога і генерує для них Здобич. Зазвичай це Здоров'я та Ресурс, як правило, з шансом 50/50 на випадіння кожного.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Приклад Здобичі
+                                </div>
+                                <p>У грі NOVA кидок 1-3 створює Здоров'я, а 4-6 — Енергію.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Відстань</h2>
+                            <p>Оскільки рух не вимірюється точно і карти не потрібні, ми зводимо відстань до абстрактних дистанцій. Ігри на ЛЮМЕН зазвичай вимагають трьох абстрактних дистанцій:</p>
+                            
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Дистанція</th>
+                                            <th>Опис</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Близька</strong></td>
+                                            <td>У ближньому бою або за кілька кроків.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Неподалік</strong></td>
+                                            <td>Через кімнату, можна добігти швидким спринтом.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Далека</strong></td>
+                                            <td>Усе, що далі.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="tip-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m1 3v7h-2V7h2m0 8v2h-2v-2h2z"/>
+                                    </svg>
+                                    Порада щодо руху
+                                </div>
+                                <p>Зазвичай, правила в іграх на ЛЮМЕН дозволяють персонажу переміститися з однієї дистанційної зони в іншу за один хід.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Шкода та Смерть</h2>
+                            <p>Коли персонажі в іграх на ЛЮМЕН атакують один одного, вони завдають <span class="highlight">Шкоду</span>. Шкода вимірюється фіксованими числами, а не змінними. Тобто атака завдає, наприклад, 2 Шкоди, а не 1d6 Шкоди. Ви завжди знаєте, на що здатні.</p>
+                            
+                            <p>Шкода віднімається від Здоров'я персонажа. Коли ворог досягає 0 Здоров'я, він мертвий і генерує Здобич під час ходу МГ.</p>
+                            
+                            <div class="warning-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m-1 12h2v2h-2v-2m0-8h2v6h-2V8z"/>
+                                    </svg>
+                                    Смерть персонажів гравців
+                                </div>
+                                <p>Коли персонажі гравців досягають 0 Здоров'я, ви повинні вирішити, яким буде штраф за "смерть" у вашій грі. Остаточна смерть для персонажів гравців не є стандартним налаштуванням у ЛЮМЕН, якщо тільки ви самі цього не захочете.</p>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- РОЗДІЛ: Вороги -->
+                    <section id="enemies" class="content-section">
+                        <h1 class="section-title">Вороги</h1>
+                        
+                        <p>Персонажам гравців потрібно когось вбивати, і для цього існують вороги. Вороги в <span class="highlight">ЛЮМЕН</span> представлені спрощеними блоками характеристик і вимагають трьох речей:</p>
+                        
+                        <div class="card-grid">
+                            <div class="card">
+                                <div class="card-title">Здоров'я</div>
+                                <p>Відстежується так само, як і у персонажів гравців.</p>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-title">Шкода</div>
+                                <p>Ушкодження, які ворог може завдати персонажам.</p>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="card-title">Ходи</div>
+                                <p>3 дії, реакції, тактики, що відображають суть ворога.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Приклад ворога</h2>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Вірні піхотинці
+                                </div>
+                                <p>Вони виконують накази, але шукають можливості для просування по службі.</p>
+                                
+                                <div class="table-container">
+                                    <table>
+                                        <tr>
+                                            <td><strong>Здоров'я:</strong></td>
+                                            <td>2</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Шкода:</strong></td>
+                                            <td>1 Шкоди, Близька/Середня дистанція</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                
+                                <p><strong>Ходи:</strong></p>
+                                <ol>
+                                    <li>Сховатися на мить за укриттям.</li>
+                                    <li>Викликати магічну турель.</li>
+                                    <li>Виконувати накази.</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Здоров'я</h2>
+                            <p>Тут небагато що можна додати: у ворогів є Здоров'я, як і у персонажів. Є лише дві важливі речі, які варто враховувати при створенні ворогів.</p>
+                            
+                            <div class="warning-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m-1 12h2v2h-2v-2m0-8h2v6h-2V8z"/>
+                                    </svg>
+                                    Не давайте їм забагато здоров'я
+                                </div>
+                                <p>Бій, у якому дві сторони просто б'ють одна одну знову, і знову, і знову — це нудно. Ворога робить цікавим не те, скільки шкоди він може витримати, а те, що він робить за своє коротке життя. Хочете рекомендацію? Не перевищуйте 10 Здоров'я.</p>
+                            </div>
+                            
+                            <div class="tip-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m1 3v7h-2V7h2m0 8v2h-2v-2h2z"/>
+                                    </svg>
+                                    Альтернативи Здоров'ю
+                                </div>
+                                <p>Ви можете мати у вашій грі інші риси, що доповнюють Здоров'я, наприклад, щити чи броню, і вороги також можуть мати до них доступ.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Шкода</h2>
+                            <p>Як не дивно, вороги справді можуть завдавати шкоди персонажам. Коли вони це роблять, вони завдають свою Шкоду. Замість того, щоб створювати конкретну зброю для ворогів, у <span class="highlight">ЛЮМЕН</span> вороги просто мають фіксовану кількість Шкоди, яку вони завдають, із зазначенням дистанції, на якій вони можуть це робити.</p>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Приклад показника Шкоди
+                                </div>
+                                <p>Ворог може мати такий показник Шкоди: <span class="highlight">2 на Близькій дистанції, 1 на Середній</span>.</p>
+                                <p>Яку зброю вони використовують? Це вирішує МГ. Це може бути дробовик або гострий ніж для ближнього бою та дешевий пістолет для дальньої дистанції.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Ходи</h2>
+                            <p>Це те, що насправді визначає ворога, даючи йому життя. Ходи представляють тактики, які вони використовують, типові дії та реакції в сутичці або просто їхню загальну поведінку на полі бою. У кожного ворога є <span class="highlight">3 ходи</span>. Обмеження до трьох дозволяє МГ швидко вирішувати, як діятиме ворог під час динамічної сутички, не звертаючись до довгого списку опцій.</p>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Вороги в сутичці</h2>
+                            <p>МГ керує ворогами під час Битв. Хоча МГ має свій хід наприкінці раунду, він також діє і під час ходів гравців.</p>
+                            
+                            <div class="info-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Коли діють вороги?
+                                </div>
+                                <p>Щоразу, коли персонаж гравця діє, і його кидок має якесь ускладнення чи наслідок (будь-який результат від 1 до 4), <span class="highlight">МГ активує одного з ворогів</span>. Найчастіше МГ просто завдає Шкоди ворога персонажу. Якщо це неможливо або не підходить за сюжетом, МГ може використати один з Ходів ворога.</p>
+                            </div>
+                            
+                            <div class="key-concept">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Хід МГ
+                                </div>
+                                <p>Коли настає хід МГ, він не тільки вносить велику зміну в Битву, але й може зробити це, звернувшись до ходів ворогів і активувавши кілька з них.</p>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    
+                    <!-- РОЗДІЛ: Ігровий цикл -->
+                    <section id="game-cycle" class="content-section">
+                        <h1 class="section-title">Ігровий цикл</h1>
+                        
+                        <p>На основі всього, що ви прочитали, можна створити чудову рольову гру на ЛЮМЕН, призначену для одноразових пригод. Але я обожнюю надійні ігрові цикли. Я помітив, що мене тягне до таких ігор, як Blades in the Dark: ви йдете на справу, виконуєте роботу, повертаєтесь, проводите час у перерві, а потім усе повторюється.</p>
+                        
+                        <p>Рольові ігри на <span class="highlight">ЛЮМЕН</span> створені саме для такого циклу. Далі йдуть правила, що формалізують те, чим саме займаються гравці, і як їхні персонажі ставатимуть ще могутнішими через розвиток та здобич.</p>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Цикл</h2>
+                            <p>Ігри на ЛЮМЕН побудовані навколо місій. Ви можете називати їх квестами, пригодами, вилазками або якось інакше, але я буду використовувати термін "місія".</p>
+                            
+                            <p>Місії — це робота, на яку відправляють персонажів гравців: зачистити підземелля, саботувати об'єкт, знайти втрачену технологію. Ігрові сесії переважно складаються з виконання місії. Загальна структура гри виглядає так:</p>
+                            
+                            <div class="key-concept">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Структура ігрового циклу
+                                </div>
+                                <ol>
+                                    <li>Короткий брифінг, де персонажі отримують свою місію.</li>
+                                    <li>Багато часу, проведеного на самій місії.</li>
+                                    <li>Розвиток персонажів після завершення місії.</li>
+                                </ol>
+                            </div>
+                            
+                            <p>Це базова структура. Персонажі не блукають, розглядаючи дошки оголошень, чи досліджуючи відкритий світ у пошуках можливостей. Їм дають місії, і вони їх виконують.</p>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Генерація Місій</h2>
+                            <p>Вам варто включити у вашу гру певні правила чи поради для генерації місій. Для цього чудово підходять таблиці. У грі NOVA є таблиці для різних типів місій, а також додаткові таблиці для визначення ворожої фракції, рівня небезпеки, модифікаторів тощо.</p>
+                            
+                            <div class="example">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/>
+                                    </svg>
+                                    Приклад генерації місії
+                                </div>
+                                <ol>
+                                    <li>Киньте d6 для визначення типу місії (1 - Захист, 2 - Атака, 3 - Розвідка...)</li>
+                                    <li>Киньте d6 для визначення ворожої фракції</li>
+                                    <li>Киньте d6 для визначення модифікатора складності</li>
+                                    <li>Поєднайте результати, щоб створити основу місії</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Брифінг та Дебрифінг</h2>
+                            <p>Ігри на ЛЮМЕН — це рольові ігри, тому варто дати можливість відігравати ролі. Хоча персонажі можуть робити це під час місії, у них не так багато шансів поспілкуватися з кимось, хто не намагається їх розірвати на шматки.</p>
+                            
+                            <p>Сцени до і після місії — це можливість для персонажів розкритися. Я рекомендую дати МГ поради, як додати рольову складову в гру під час цих етапів.</p>
+                            
+                            <div class="tip-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m1 3v7h-2V7h2m0 8v2h-2v-2h2z"/>
+                                    </svg>
+                                    Поради для МГ щодо брифінгу/дебрифінгу
+                                </div>
+                                <ul>
+                                    <li>Використовуйте NPC, які дають місії, щоб встановити тон та створити атмосферу.</li>
+                                    <li>Давайте гравцям можливість взаємодіяти один з одним та розкривати свої характери.</li>
+                                    <li>Під час дебрифінгу дозвольте гравцям похизуватися своїми досягненнями.</li>
+                                    <li>Використовуйте ці моменти для введення нових сюжетних ліній та натяків на майбутні місії.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Доповнення до Циклу</h2>
+                            <p>Ігровий цикл є прямолінійним, але існують можливості його урізноманітнити. Один з найпопулярніших способів — додати у гру фракції. Хтось же має давати персонажам місії, чи не так? Створюючи фракції та відстежуючи репутацію гравців у різних групах, ви побачите, як гравці почнуть обирати, з ким їм працювати.</p>
+                            
+                            <div class="card-grid">
+                                <div class="card">
+                                    <div class="card-title">Фракції</div>
+                                    <p>Створіть 3-5 фракцій, які можуть замовляти місії. Кожна фракція повинна мати власні цілі, ресурси та стиль. Відстежуйте репутацію персонажів з кожною фракцією на шкалі від -3 до +3.</p>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-title">База операцій</div>
+                                    <p>Дайте гравцям місце, яке вони можуть вважати домом. Це може бути корабель, таверна, штаб-квартира або щось інше, що відповідає сеттингу. З часом вони зможуть його покращувати.</p>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-title">Глобальна подія</div>
+                                    <p>Після кожної місії киньте кубик для визначення, чи відбувається щось значуще у світі. Це додає відчуття, що світ живе своїм життям, незалежно від дій персонажів.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Розвиток</h2>
+                            <p>Нарешті ми підійшли до кінця циклу і останнього елементу пазла ЛЮМЕН. Ці персонажі могутні, але вони хочуть стати <span class="highlight">ЩЕ МОГУТНІШИМИ</span>!</p>
+                            
+                            <p>Розвиток персонажів в іграх на ЛЮМЕН буває двох видів: розвиток самих персонажів та розвиток їхньої здобичі.</p>
+                            
+                            <h3>Розвиток персонажа</h3>
+                            <p>Розвиток персонажа — це коли самі персонажі стають сильнішими. Є кілька способів це зробити:</p>
+                            
+                            <div class="info-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Способи розвитку персонажа
+                                </div>
+                                <ul>
+                                    <li><strong>Збільшити значення Атрибута.</strong></li>
+                                    <li><strong>Збільшити максимальне Здоров'я або Ресурс.</strong></li>
+                                    <li><strong>Покращити Сили.</strong> У NOVA кожна Сила має 2 покращення, які можна відкрити. Вони можуть бути простими, як-от +1 до Шкоди, або дозволяти використовувати Силу новими способами.</li>
+                                    <li><strong>Отримати доступ до нових Сил.</strong> Якщо ви це робите, я рекомендую вимагати заміни існуючої Сили, а не додавання нових опцій, щоб не сповільнювати гру.</li>
+                                </ul>
+                            </div>
+                            
+                            <h3>Розвиток через здобич</h3>
+                            <p>Розвиток через здобич — це все про те, як зробити зброю в грі цікавішою. Цей вид розвитку найкраще підходить для ігор, де зброя відіграє провідну роль у сутичках. Є багато способів реалізувати це:</p>
+                            
+                            <div class="info-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Способи розвитку через здобич
+                                </div>
+                                <ul>
+                                    <li>Генерувати нову зброю наприкінці кожної місії.</li>
+                                    <li>Здобувати прихильність виробників зброї, що дозволить "купувати" нову зброю.</li>
+                                    <li>Замінювати теги на зброї після успішних місій.</li>
+                                    <li>Отримати доступ до легендарної зброї!</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="tip-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2m0 2a8 8 0 0 0-8 8 8 8 0 0 0 8 8 8 8 0 0 0 8-8 8 8 0 0 0-8-8m1 3v7h-2V7h2m0 8v2h-2v-2h2z"/>
+                                    </svg>
+                                    Порада
+                                </div>
+                                <p>Не всім іграм на ЛЮМЕН потрібна розгалужена система здобичі, або навіть хоч якась. Вирішуйте, що найкраще підходить для вашої гри.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="subsection">
+                            <h2 class="subsection-title">Створення гри на ЛЮМЕН</h2>
+                            <p>Тепер у вас є всі правила та поради, необхідні для створення рольової гри з використанням системи ЛЮМЕН. Якщо ви хочете щось створити за допомогою неї, я на 100% даю своє благословення. Я лише прошу вас включити наступний текст:</p>
+                            
+                            <div class="key-concept">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Атрибуція
+                                </div>
+                                <p><em>Ця гра є Illuminated і створена з використанням системи ЛЮМЕН, розробленої Спенсером Кемпбеллом з GilaRPGs. Ця гра не є афілійованою з Gila RPGs.</em></p>
+                            </div>
+                            
+                            <p>Нарешті, якщо ви хочете пропустити всю "воду" вище, ось чек-лист для створення рольової гри на ЛЮМЕН:</p>
+                            
+                            <div class="info-box">
+                                <div class="box-title">
+                                    <svg class="icon" viewBox="0 0 24 24">
+                                        <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-5h2v2h-2v-2zm0-8h2v6h-2V7z"/>
+                                    </svg>
+                                    Чек-лист для створення гри на ЛЮМЕН
+                                </div>
+                                <ol>
+                                    <li>Визначте 3 Атрибути для сили, швидкості та методичних дій.</li>
+                                    <li>Створіть класи. Кожен клас потребує:
+                                        <ul>
+                                            <li>3 Атрибути</li>
+                                            <li>Здоров'я</li>
+                                            <li>Ресурс</li>
+                                            <li>3-5 Сил</li>
+                                        </ul>
+                                    </li>
+                                    <li>Створіть ворогів. Кожен ворог потребує:
+                                        <ul>
+                                            <li>Здоров'я</li>
+                                            <li>Шкоду</li>
+                                            <li>3 Ходи</li>
+                                        </ul>
+                                    </li>
+                                    <li>Створіть типи зброї та теги. Кожен тип зброї потребує:
+                                        <ul>
+                                            <li>Шкоду</li>
+                                            <li>Дистанцію</li>
+                                            <li>Опціональні обов'язкові теги</li>
+                                        </ul>
+                                    </li>
+                                </ol>
+                            </div>
+                            
+                            <p>Якщо ви створите ці речі, ви вже майже на фінішній прямій до готової гри на ЛЮМЕН.</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const sidebar = document.getElementById('sidebar');
+        
+        mobileMenuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+        });
+        
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            updateThemeIcon(true);
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            
+            if (isDark) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            
+            updateThemeIcon(!isDark);
+        });
+        
+        function updateThemeIcon(isDark) {
+            if (isDark) {
+                themeIcon.innerHTML = '<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>';
+            } else {
+                themeIcon.innerHTML = '<path d="M12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6zm0-10c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0-6a1 1 0 0 1 1 1v2a1 1 0 0 1-2 0V3a1 1 0 0 1 1-1zm0 20a1 1 0 0 1-1-1v-2a1 1 0 0 1 2 0v2a1 1 0 0 1-1 1zm6-10a1 1 0 0 1 1 1 1 1 0 0 1-1 1h-2a1 1 0 0 1 0-2h2zm-10 0a1 1 0 0 1 0 2H6a1 1 0 0 1 0-2h2zm8.95-5.364a1 1 0 0 1 0 1.414L15.536 9.464a1 1 0 0 1-1.414-1.414l1.414-1.414a1 1 0 0 1 1.414 0zm-9.9 9.9a1 1 0 0 1 0 1.414L8.636 15.536a1 1 0 0 1-1.414-1.414l1.414-1.414a1 1 0 0 1 1.414 0zm9.9 1.414a1 1 0 0 1-1.414 0l-1.414-1.414a1 1 0 0 1 1.414-1.414l1.414 1.414a1 1 0 0 1 0 1.414zm-9.9-9.9a1 1 0 0 1-1.414 0L6.636 8.464A1 1 0 1 1 8.05 7.05l1.414 1.414a1 1 0 0 1 0 1.414z"/>';
+            }
+        }
+        
+        // Animated dice
+        const dice = document.querySelectorAll('.die');
+        
+        dice.forEach((die, index) => {
+            die.addEventListener('click', () => {
+                die.style.animation = 'none';
+                void die.offsetWidth; // Trigger reflow
+                die.style.animation = `appear 0.5s forwards`;
+                
+                // Random die face
+                const faces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+                const randomFace = faces[Math.floor(Math.random() * faces.length)];
+                die.textContent = randomFace;
+            });
+            
+            // Stagger initial animation
+            die.style.animationDelay = `${index * 0.1}s`;
+        });
+        
+        // Active link highlighting
+        const navLinks = document.querySelectorAll('.nav-item a');
+        const sections = document.querySelectorAll('.content-section');
+        
+        function setActiveLink() {
+            const scrollPosition = window.scrollY;
+            
+            sections.forEach((section) => {
+                const sectionTop = section.offsetTop - 80;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    navLinks.forEach((link) => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${sectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', setActiveLink);
+        
+        // Initial setup
+        setActiveLink();
+    </script>
+</body>
+</html>
