@@ -225,11 +225,44 @@
             bottom: 25%;
             right: 25%;
         }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .sidebar-toggle {
+                display: block;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 50;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                background: #FFDC00;
+                color: #0F1218;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 0 10px rgba(255, 220, 0, 0.5);
+            }
+
+            .mobile-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 40;
+                overflow-y: auto;
+                background-color: rgba(10, 12, 16, 0.95);
+                backdrop-filter: blur(5px);
+            }
+        }
     </style>
 </head>
 <body class="min-h-screen bg-dark-950 hex-pattern">
     <div x-data="{ 
         showMobileMenu: false,
+        showSidebar: false,
         activeSection: 'section-1',
         observeSection() {
             const observer = new IntersectionObserver((entries) => {
@@ -245,58 +278,136 @@
             });
         }
     }" x-init="observeSection()">
-        <!-- Заголовок і логотип -->
-        <header class="w-full bg-dark-900 shadow-md sticky top-0 z-50 border-b border-dark-600">
-            <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 relative mr-3">
-                        <div class="absolute inset-0 bg-accent rounded-full opacity-10 animate-pulse"></div>
-                        <div class="absolute inset-2 border border-accent rounded-full"></div>
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <span class="text-2xl font-display font-extrabold text-accent glow-accent">L</span>
-                        </div>
+        
+        <!-- Заголовок -->
+        <div class="py-6 px-4 bg-dark-900 bg-opacity-80 backdrop-blur-sm border-b border-dark-700 shadow-md text-center">
+            <div class="flex items-center justify-center">
+                <div class="w-10 h-10 relative mr-3">
+                    <div class="absolute inset-0 bg-accent rounded-full opacity-10 animate-pulse"></div>
+                    <div class="absolute inset-2 border border-accent rounded-full"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <span class="text-2xl font-display font-extrabold text-accent glow-accent">L</span>
                     </div>
-                    <h1 class="text-xl font-display font-bold tracking-tight text-white">
-                        ЛЮМЕН <span class="text-sm font-normal text-gray-400">| SRD</span>
-                    </h1>
+                </div>
+                <h1 class="text-xl font-display font-bold tracking-tight text-white">
+                    ЛЮМЕН <span class="text-sm font-normal text-gray-400">| SRD</span>
+                </h1>
+            </div>
+        </div>
+        
+        <!-- Кнопка для мобільного перемикання сайдбару -->
+        <button @click="showSidebar = !showSidebar" class="sidebar-toggle md:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+            </svg>
+        </button>
+        
+        <!-- Мобільний сайдбар -->
+        <div x-show="showSidebar" 
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform -translate-x-full"
+            x-transition:enter-end="opacity-100 transform translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 transform translate-x-0"
+            x-transition:leave-end="opacity-0 transform -translate-x-full"
+            class="mobile-sidebar md:hidden" @click.away="showSidebar = false">
+            
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-display font-bold text-white">ЗМІСТ</h2>
+                    <button @click="showSidebar = false" class="text-gray-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
                 
-                <button @click="showMobileMenu = !showMobileMenu" class="md:hidden text-gray-400 hover:text-accent">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-                
-                <nav class="hidden md:flex space-x-6 text-sm">
-                    <a href="#" class="text-accent hover:text-accent-dark transition">ГОЛОВНА</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">КЛАСИ</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">СИЛИ</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">ЗБРОЯ</a>
-                    <a href="#" class="text-gray-400 hover:text-white transition">ВОРОГИ</a>
+                <nav class="space-y-1 pr-2 mb-6">
+                    <a href="#section-1" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-1' }">
+                        <span class="text-accent font-mono w-8">01</span>
+                        <span :class="{ 'text-white': activeSection === 'section-1', 'text-gray-400': activeSection !== 'section-1' }">ЩО ТАКЕ ЛЮМЕН?</span>
+                    </a>
+                    
+                    <a href="#section-2" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-2' }">
+                        <span class="text-accent font-mono w-8">02</span>
+                        <span :class="{ 'text-white': activeSection === 'section-2', 'text-gray-400': activeSection !== 'section-2' }">ОСНОВНА МЕХАНІКА</span>
+                    </a>
+                    
+                    <a href="#section-3" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-3' }">
+                        <span class="text-accent font-mono w-8">03</span>
+                        <span :class="{ 'text-white': activeSection === 'section-3', 'text-gray-400': activeSection !== 'section-3' }">АТРИБУТИ</span>
+                    </a>
+                    
+                    <a href="#section-4" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-4' }">
+                        <span class="text-accent font-mono w-8">04</span>
+                        <span :class="{ 'text-white': activeSection === 'section-4', 'text-gray-400': activeSection !== 'section-4' }">КЛАСИ</span>
+                    </a>
+                    
+                    <a href="#section-5" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-5' }">
+                        <span class="text-accent font-mono w-8">05</span>
+                        <span :class="{ 'text-white': activeSection === 'section-5', 'text-gray-400': activeSection !== 'section-5' }">СИЛИ</span>
+                    </a>
+                    
+                    <a href="#section-6" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-6' }">
+                        <span class="text-accent font-mono w-8">06</span>
+                        <span :class="{ 'text-white': activeSection === 'section-6', 'text-gray-400': activeSection !== 'section-6' }">ДОДАТКОВІ ОСОБЛИВОСТІ ПЕРСОНАЖА</span>
+                    </a>
+                    
+                    <a href="#section-7" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-7' }">
+                        <span class="text-accent font-mono w-8">07</span>
+                        <span :class="{ 'text-white': activeSection === 'section-7', 'text-gray-400': activeSection !== 'section-7' }">ВАРІАНТИ СТВОРЕННЯ ПЕРСОНАЖА</span>
+                    </a>
+                    
+                    <a href="#section-8" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-8' }">
+                        <span class="text-accent font-mono w-8">08</span>
+                        <span :class="{ 'text-white': activeSection === 'section-8', 'text-gray-400': activeSection !== 'section-8' }">СУТИЧКА</span>
+                    </a>
+                    
+                    <a href="#section-9" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-9' }">
+                        <span class="text-accent font-mono w-8">09</span>
+                        <span :class="{ 'text-white': activeSection === 'section-9', 'text-gray-400': activeSection !== 'section-9' }">ВОРОГИ</span>
+                    </a>
+                    
+                    <a href="#section-10" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-10' }">
+                        <span class="text-accent font-mono w-8">10</span>
+                        <span :class="{ 'text-white': activeSection === 'section-10', 'text-gray-400': activeSection !== 'section-10' }">ЗБРОЯ</span>
+                    </a>
+                    
+                    <a href="#section-11" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-11' }">
+                        <span class="text-accent font-mono w-8">11</span>
+                        <span :class="{ 'text-white': activeSection === 'section-11', 'text-gray-400': activeSection !== 'section-11' }">ІГРОВИЙ ЦИКЛ</span>
+                    </a>
+                    
+                    <a href="#section-12" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-12' }">
+                        <span class="text-accent font-mono w-8">12</span>
+                        <span :class="{ 'text-white': activeSection === 'section-12', 'text-gray-400': activeSection !== 'section-12' }">РОЗВИТОК</span>
+                    </a>
+                    
+                    <a href="#section-13" @click="showSidebar = false" class="toc-item px-4 py-2 rounded-md flex items-center text-sm" :class="{ 'active': activeSection === 'section-13' }">
+                        <span class="text-accent font-mono w-8">13</span>
+                        <span :class="{ 'text-white': activeSection === 'section-13', 'text-gray-400': activeSection !== 'section-13' }">СТВОРЕННЯ ГРИ НА ЛЮМЕН</span>
+                    </a>
                 </nav>
+                
+                <div class="flex justify-between items-center border-t border-dark-600 pt-6">
+                    <div class="px-3 py-1 bg-dark-800 rounded-md border border-dark-600 text-xs text-gray-400">
+                        версія <span class="text-accent">1.0</span>
+                    </div>
+                    <div class="text-right">
+                        <a href="https://github.com/heisssen/lumen" target="_blank" class="text-accent hover:text-accent-dark text-xs flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
             </div>
-        </header>
-        
-        <!-- Мобільне меню -->
-        <div x-show="showMobileMenu" x-transition:enter="transition ease-out duration-200"
-             x-transition:enter-start="opacity-0 -translate-y-10"
-             x-transition:enter-end="opacity-100 translate-y-0"
-             x-transition:leave="transition ease-in duration-150"
-             x-transition:leave-start="opacity-100 translate-y-0"
-             x-transition:leave-end="opacity-0 -translate-y-10"
-             class="md:hidden bg-dark-800 border-b border-dark-600 shadow-lg">
-            <nav class="max-w-7xl mx-auto px-4 py-3 flex flex-col space-y-3">
-                <a href="#" class="text-accent hover:text-accent-dark transition py-2">ГОЛОВНА</a>
-                <a href="#" class="text-gray-400 hover:text-white transition py-2">КЛАСИ</a>
-                <a href="#" class="text-gray-400 hover:text-white transition py-2">СИЛИ</a>
-                <a href="#" class="text-gray-400 hover:text-white transition py-2">ЗБРОЯ</a>
-                <a href="#" class="text-gray-400 hover:text-white transition py-2">ВОРОГИ</a>
-            </nav>
         </div>
         
         <div class="max-w-7xl mx-auto px-4 py-12 flex flex-col lg:flex-row">
-            <!-- Бічна панель зі змістом -->
-            <aside class="lg:w-80 xl:w-96 flex-shrink-0 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-5rem)] lg:overflow-y-auto pb-8 lg:pr-8 mb-8 lg:mb-0">
+            <!-- Бічна панель зі змістом (прихована на мобільних) -->
+            <aside class="hidden lg:block lg:w-80 xl:w-96 flex-shrink-0 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-5rem)] lg:overflow-y-auto pb-8 lg:pr-8 mb-8 lg:mb-0">
                 <div class="bg-dark-900 bg-opacity-80 backdrop-blur-sm rounded-xl shadow-xl border border-dark-700 p-6">
                     <h2 class="text-xl font-display font-bold text-white mb-6 flex items-center">
                         <span class="w-8 h-8 rounded-full bg-accent bg-opacity-20 flex items-center justify-center mr-3">
@@ -577,6 +688,7 @@
                         </div>
                     </div>
                 </section>
+
 
                 <!-- Розділ 2: ОСНОВНА МЕХАНІКА -->
                 <section id="section-2" class="mb-24">
